@@ -1,0 +1,20 @@
+<footer>
+  <section>
+    <span>{{ appName() }}</span>
+    <span>
+      <a [href]="author.url" target="_blank">{{ author.name }}</a>
+    </span>
+    <span>©️ {{ year }}</span>
+    <span>{{ version }}</span>
+  </section>
+  <section>
+    @if (cookiesAccepted()) {
+      <span>🍪 Cookies accepted</span>
+    } @else {
+      <!-- Event binding can be used with (parenthesis) -->
+      <button class="secondary outline" (click)="acceptCookies()">
+        Accept cookies
+      </button>
+    }
+  </section>
+</footer>

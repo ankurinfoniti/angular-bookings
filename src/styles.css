@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  padding: 1rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 300;
+  font-style: normal;
+}
+
+h1,
+h2 {
+  font-family: "Major Mono Display", monospace;
+  font-style: normal;
+  font-weight: 400;
+}
+
+h3 {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+span {
+  margin-right: 1vw;
+}
