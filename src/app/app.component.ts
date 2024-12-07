@@ -11,5 +11,5 @@ import { FooterComponent } from './core/layout/footer/footer.component';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  protected readonly title: string = '🚀 Angular Bookings';
+  protected readonly title: string = '🚀 Astro Bookings';
 }

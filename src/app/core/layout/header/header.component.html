@@ -1,1 +1,16 @@
-<header>{{ title() | uppercase }}</header>
+<header>
+  <nav>
+    <ul>
+      <li>
+        <a routerLink="/">
+          <strong>{{ title() | uppercase }}</strong>
+        </a>
+      </li>
+    </ul>
+    <ul>
+      <li><a routerLink="/">🏠 Home</a></li>
+      <li><a routerLink="/about">ℹ️ About</a></li>
+      <li><a routerLink="/auth/login">🔒 Login</a></li>
+    </ul>
+  </nav>
+</header>
