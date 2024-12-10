@@ -5,8 +5,8 @@
 <p>Price per seat: {{ launch().pricePerSeat | currency }}</p>
 <p>Status: {{ launch().status }}</p>
 @if (rocket()) {
-<p>Rocket: {{ rocket()?.name }}</p>
-<p>Capacity: {{ rocket()?.capacity }}</p>
+  <p>Rocket: {{ rocket()?.name }}</p>
+  <p>Capacity: {{ rocket()?.capacity }}</p>
 } @else {
-<p>Rocket not found</p>
+  <p>Rocket not found</p>
 }
