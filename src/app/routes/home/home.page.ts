@@ -1,16 +1,18 @@
-import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { LAUNCHES } from '../../shared/data/launches.data';
-import { LaunchDto } from '../../shared/models/launch.dto';
+import { LaunchDto } from '@models/launch.dto';
+import { PageHeaderComponent } from '@ui/page-header.component';
+import { LaunchesRepository } from 'src/app/shared/api/launches.repository';
+import { LaunchesListComponent } from '../launches/launches-list/launches-list.component';
 
 @Component({
-  imports: [DatePipe, RouterLink],
+  imports: [PageHeaderComponent, LaunchesListComponent],
   templateUrl: './home.page.html',
   styleUrl: './home.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePage {
-  protected launches: LaunchDto[] = LAUNCHES;
+  private readonly launchesRepository = inject(LaunchesRepository);
+  protected readonly title: string = 'Upcoming Launches';
+  protected launches: LaunchDto[] = this.launchesRepository.getAll();
 }

@@ -1,0 +1,10 @@
+<ul>
+  @for (launch of launches(); track launch.id) {
+    <li>
+      <!-- A dynamic link -->
+      <a [routerLink]="['launches', launch.id]">
+        {{ launch.mission }} - {{ launch.date | date }}
+      </a>
+    </li>
+  }
+</ul>

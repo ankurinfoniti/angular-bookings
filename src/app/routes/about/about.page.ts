@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { PageHeaderComponent } from '@ui/page-header.component';
 
 @Component({
-  imports: [],
+  imports: [PageHeaderComponent],
   templateUrl: './about.page.html',
   styleUrl: './about.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

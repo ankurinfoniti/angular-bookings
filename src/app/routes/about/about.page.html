@@ -1,20 +1,18 @@
 <article>
-  <header>
-    <h2>About Astro Bookings sample app</h2>
-  </header>
+  <app-page-header title="About Astro Bookings"></app-page-header>
   <main>
     <h3>Tech stack</h3>
     <ul>
       @for (tech of techStack; track tech.name) {
-        <li>
-          <a [href]="tech.url">{{ tech.name }}</a>
-        </li>
+      <li>
+        <a [href]="tech.url">{{ tech.name }}</a>
+      </li>
       }
     </ul>
     <h3>Features</h3>
     <ul>
       @for (feature of features; track feature) {
-        <li>{{ feature }}</li>
+      <li>{{ feature }}</li>
       }
     </ul>
   </main>

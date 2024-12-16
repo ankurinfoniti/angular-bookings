@@ -1,10 +1,9 @@
-<h3>Next Space Travel launches</h3>
-<ul>
-  @for(launch of launches; track launch.id) {
-    <li>
-      <a [routerLink]="['/launches', launch.id]">
-        {{ launch.mission }} - {{ launch.date | date }}
-      </a>
-    </li>
-  }
-</ul>
+<article>
+  <app-page-header
+    [title]="title"
+    subtitle="Choose your journey"
+  ></app-page-header>
+  <main>
+    <app-launches-list [launches]="launches"></app-launches-list>
+  </main>
+</article>

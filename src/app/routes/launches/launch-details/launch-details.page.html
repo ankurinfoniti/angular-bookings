@@ -1,12 +1,17 @@
-<h2>{{ id() }}</h2>
-<p>Launch details for <b>{{ launch().mission }}</b></p>
-<p>Destination: {{ launch().destination }}</p>
-<p>Date: {{ launch().date | date }}</p>
-<p>Price per seat: {{ launch().pricePerSeat | currency }}</p>
-<p>Status: {{ launch().status }}</p>
-@if (rocket()) {
-  <p>Rocket: {{ rocket()?.name }}</p>
-  <p>Capacity: {{ rocket()?.capacity }}</p>
-} @else {
-  <p>Rocket not found</p>
-}
+<article>
+  <app-page-header [title]="title()" [subtitle]="subtitle()"></app-page-header>
+  <main>
+    <p>
+      <strong>Rocket:</strong> {{ rocket().name }} ({{ rocket().capacity }}
+      seats)
+    </p>
+    <p><strong>Destination:</strong> {{ launch().destination }}</p>
+    @if(!isNullDate()){
+     <p><strong>Date:</strong> {{ launch().date | date : 'medium' }}</p>
+    }
+    <p>
+      <strong>Price per seat:</strong>
+      {{ launch().pricePerSeat | currency }}
+    </p>
+  </main>
+</article>
