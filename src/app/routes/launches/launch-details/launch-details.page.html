@@ -1,17 +1,9 @@
 <article>
   <app-page-header [title]="title()" [subtitle]="subtitle()"></app-page-header>
   <main>
-    <p>
-      <strong>Rocket:</strong> {{ rocket().name }} ({{ rocket().capacity }}
-      seats)
-    </p>
-    <p><strong>Destination:</strong> {{ launch().destination }}</p>
-    @if(!isNullDate()){
-     <p><strong>Date:</strong> {{ launch().date | date : 'medium' }}</p>
-    }
-    <p>
-      <strong>Price per seat:</strong>
-      {{ launch().pricePerSeat | currency }}
-    </p>
+    <p><b>Rocket: </b> {{ rocket().name }} ({{ rocket().capacity }} seats)</p>
+    <p><b>Destination: </b> {{ launch().destination }}</p>
+    <p><b>Date: </b> {{ launch().date | date : 'medium' }}</p>
+    <p><b>Price per seat: </b> {{ launch().pricePerSeat | currency }}</p>
   </main>
 </article>

@@ -10,7 +10,12 @@
     <ul>
       <li><a routerLink="/">🏠 Home</a></li>
       <li><a routerLink="/about">ℹ️ About</a></li>
-      <li><a routerLink="/auth/login">🔒 Login</a></li>
+      @if (isAuthenticated()) {
+        <li><a routerLink="/">🎟️ My bookings</a></li>
+        <li (click)="logout()">👤 Log out</li>
+      } @else {
+        <li><a routerLink="/auth/login">🔒 Login</a></li>
+      }
     </ul>
   </nav>
 </header>

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  ResourceRef,
+  Signal,
+} from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 import { LaunchDto } from '@models/launch.dto';
 import { PageHeaderComponent } from '@ui/page-header.component';
@@ -14,5 +22,18 @@ import { LaunchesListComponent } from '../launches/launches-list/launches-list.c
 export class HomePage {
   private readonly launchesRepository = inject(LaunchesRepository);
   protected readonly title: string = 'Upcoming Launches';
-  protected launches: LaunchDto[] = this.launchesRepository.getAll();
+
+  protected readonly launchesResource: ResourceRef<LaunchDto[]> = rxResource({
+    loader: this.launchesRepository.getAll$,
+  });
+
+  protected readonly launches: Signal<LaunchDto[]> = computed(
+    () => this.launchesResource.value() ?? [],
+  );
+
+  protected readonly errorMessage: Signal<string> = computed(
+    () =>
+      (this.launchesResource.error() as { message: string })['message'] ||
+      'Unknown error',
+  );
 }

@@ -8,9 +8,10 @@ import {
   InputSignal,
   Signal,
 } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 
-import { LaunchDto } from '@models/launch.dto';
-import { RocketDto } from '@models/rocket.dto';
+import { LaunchDto, NULL_LAUNCH } from '@models/launch.dto';
+import { NULL_ROCKET, RocketDto } from '@models/rocket.dto';
 import { PageHeaderComponent } from '@ui/page-header.component';
 import { LaunchesRepository } from 'src/app/shared/api/launches.repository';
 import { RocketsRepository } from 'src/app/shared/api/rockets.repository';
@@ -26,36 +27,27 @@ export default class LaunchDetailsPage {
   private readonly rocketsRepository = inject(RocketsRepository);
 
   public readonly id: InputSignal<string> = input.required<string>();
-  /**
-   * The launch object computed from the `id` input signal
-   * - Warning: this works because the `find` method is **synchronous**
-   * - Returns the launch or the NULL_LAUNCH if the launch is not found
-   * - This way we avoid undefined errors
-   */
-  protected launch: Signal<LaunchDto> = computed(() =>
-    this.launchesRepository.getById(this.id()),
-  );
 
+  protected readonly launchResource = rxResource({
+    request: () => this.id(),
+    loader: (param) => this.launchesRepository.getById$(param.request),
+  });
+
+  protected readonly launch: Signal<LaunchDto> = computed(
+    () => this.launchResource.value() || NULL_LAUNCH,
+  );
   protected readonly title: Signal<string> = computed(
     () => '🚀 ' + this.launch().mission,
   );
-
   protected readonly subtitle: Signal<string> = computed(
     () => 'launch-details for: ' + this.id(),
   );
 
-  protected readonly isNullDate: Signal<boolean> = computed(
-    () =>
-      this.launch().date.toDateString() ===
-      new Date(1, 1, 1, 0, 0, 0, 0).toDateString(),
-  );
-
-  /**
-   * The rocket object computed from the launch
-   * - Returns the rocket or NULL_ROCKET if the rocket is not found
-   * - This way we need to check if the rocket is undefined before using it
-   */
-  protected rocket: Signal<RocketDto> = computed(() =>
-    this.rocketsRepository.getById(this.launch().rocketId),
+  protected readonly rocketResource = rxResource({
+    request: () => this.launch().rocketId,
+    loader: (param) => this.rocketsRepository.getById$(param.request),
+  });
+  protected readonly rocket: Signal<RocketDto> = computed(
+    () => this.rocketResource.value() || NULL_ROCKET,
   );
 }

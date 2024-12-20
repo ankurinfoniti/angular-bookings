@@ -14,8 +14,9 @@ import { RegisterFormComponent } from './register-form/register-form.component';
 })
 export default class RegisterPage {
   private readonly authService = inject(AuthService);
+  protected readonly result = this.authService.result;
 
   protected register(registerDto: RegisterDto): void {
-    this.authService.register(registerDto).subscribe();
+    this.authService.register(registerDto);
   }
 }

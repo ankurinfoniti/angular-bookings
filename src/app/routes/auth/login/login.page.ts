@@ -15,7 +15,9 @@ import { LoginFormComponent } from './login-form/login-form.component';
 export default class LoginPage {
   private readonly authService = inject(AuthService);
 
+  protected readonly result = this.authService.result;
+
   protected login(loginDto: LoginDto): void {
-    this.authService.login(loginDto).subscribe();
+    this.authService.login(loginDto);
   }
 }

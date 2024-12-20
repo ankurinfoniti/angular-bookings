@@ -4,6 +4,14 @@
     subtitle="Choose your journey"
   ></app-page-header>
   <main>
-    <app-launches-list [launches]="launches"></app-launches-list>
+    @switch(launchesResource.status()) { 
+      @case(1) {
+        <p>{{ errorMessage() }}</p>
+      } @case(2) {
+        <p>Loading...</p>
+      } @default {
+        <app-launches-list [launches]="launches()" />
+      } 
+    }
   </main>
 </article>
