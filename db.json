@@ -1,0 +1,40 @@
+{
+  "launches": [
+    {
+      "id": "lnc-1",
+      "agencyId": "agc-1",
+      "rocketId": "rck-1",
+      "date": "2029-06-01T00:00:00Z",
+      "mission": "Moon Landing",
+      "destination": "Moon",
+      "pricePerSeat": 100,
+      "status": "scheduled"
+    },
+    {
+      "id": "lnc-2",
+      "agencyId": "agc-1",
+      "rocketId": "rck-2",
+      "date": "2039-07-20T00:00:00Z",
+      "mission": "Mars Landing",
+      "destination": "Mars",
+      "pricePerSeat": 200,
+      "status": "scheduled"
+    }
+  ],
+  "rockets": [
+    {
+      "id": "rck-1",
+      "agencyId": "agc-1",
+      "name": "Dragon",
+      "capacity": 4,
+      "range": "Moon"
+    },
+    {
+      "id": "rck-2",
+      "agencyId": "agc-1",
+      "name": "Starship",
+      "capacity": 20,
+      "range": "Interplanetary"
+    }
+  ]
+}
