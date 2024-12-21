@@ -1,9 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  signal,
+  WritableSignal,
+} from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 
+import { AuthRepository } from '@api/auth.repository';
+import { LoginDto, NULL_LOGIN_DTO } from '@models/login.dto';
+import { NULL_USER_TOKEN } from '@models/user-token.dto';
+import { AuthStore } from '@services/auth.store';
 import { PageHeaderComponent } from '@ui/page-header.component';
-import { LoginDto } from '@models/login.dto';
-import { AuthService } from '../auth.service';
 import { LoginFormComponent } from './login-form/login-form.component';
 
 @Component({
@@ -13,11 +23,29 @@ import { LoginFormComponent } from './login-form/login-form.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class LoginPage {
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
+  private readonly authStore = inject(AuthStore);
 
-  protected readonly result = this.authService.result;
+  private readonly loginDto: WritableSignal<LoginDto> =
+    signal<LoginDto>(NULL_LOGIN_DTO);
 
-  protected login(loginDto: LoginDto): void {
-    this.authService.login(loginDto);
+  private readonly loginResource = rxResource({
+    request: () => this.loginDto(),
+    loader: (param) => this.authRepository.postLogin$(param.request),
+  });
+
+  private readonly storeEffect = effect(() => {
+    const userToken = this.loginResource.value();
+
+    if (!userToken || userToken === NULL_USER_TOKEN) {
+      this.authStore.dispatchLogout();
+    } else {
+      this.authStore.dispatchLogin(userToken);
+    }
+  });
+
+  protected login(loginDto: LoginDto) {
+    console.log(loginDto);
+    this.loginDto.set(loginDto);
   }
 }

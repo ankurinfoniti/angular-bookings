@@ -1,9 +1,16 @@
 <article>
-  <app-page-header [title]="title()" [subtitle]="subtitle()"></app-page-header>
+  <app-page-header [title]="title()" [subtitle]="subtitle()" />
   <main>
     <p><b>Rocket: </b> {{ rocket().name }} ({{ rocket().capacity }} seats)</p>
     <p><b>Destination: </b> {{ launch().destination }}</p>
     <p><b>Date: </b> {{ launch().date | date : 'medium' }}</p>
     <p><b>Price per seat: </b> {{ launch().pricePerSeat | currency }}</p>
   </main>
+  <footer>
+    @if (isLoggedIn()) {
+      <button (click)="book()">Book a seat</button>
+    } @else {
+      <p>Please login to book</p>
+    }
+  </footer>
 </article>

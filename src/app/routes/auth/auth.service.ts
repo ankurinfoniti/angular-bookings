@@ -1,76 +1,36 @@
-import {
-  computed,
-  inject,
-  Injectable,
-  Signal,
-  signal,
-  WritableSignal,
-} from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { AuthRepository } from '@api/auth.repository';
-import { LoginDto } from '@models/login.dto';
-import { RegisterDto } from '@models/register.dto';
+import { LoginDto, NULL_LOGIN_DTO } from '@models/login.dto';
+import { NULL_REGISTER_DTO, RegisterDto } from '@models/register.dto';
 import { NULL_USER_TOKEN, UserTokenDto } from '@models/user-token.dto';
-
-type Trigger =
-  { type: 'LOGIN'; payload: LoginDto }
-  | { type: 'REGISTER'; payload: RegisterDto };
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly authRepository: AuthRepository = inject(AuthRepository);
-  private readonly trigger: WritableSignal<Trigger | undefined> = signal<
-    Trigger | undefined
-  >(undefined);
+  private readonly httpClient: HttpClient = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl;
 
-  private readonly authResource = rxResource({
-    request: () => this.trigger(),
-    loader: (param) => {
-      const trigger = param.request;
-      if (!trigger) return of(NULL_USER_TOKEN);
-      switch (trigger.type) {
-        case 'LOGIN':
-          return this.login$(trigger.payload);
-        case 'REGISTER':
-          return this.register$(trigger.payload);
-      }
-    },
-  });
-
-  public readonly result: Signal<string> = computed(() => {
-    const value: UserTokenDto | undefined = this.authResource.value();
-    if (value?.accessToken) {
-      return 'logged in';
+  postLogin$(loginDto: LoginDto): Observable<UserTokenDto> {
+    if (loginDto === NULL_LOGIN_DTO) {
+      return of(NULL_USER_TOKEN);
     }
-    const error: unknown = this.authResource.error();
-    return (error as { message?: string }).message || 'unknown';
-  });
 
-  public login(loginDto: LoginDto): void {
-    this.trigger.set({ type: 'LOGIN', payload: loginDto });
+    const url = `${this.apiUrl}/login`;
+
+    return this.httpClient.post<UserTokenDto>(url, loginDto);
   }
 
-  public register(registerDto: RegisterDto): void {
-    this.trigger.set({ type: 'REGISTER', payload: registerDto });
+  postRegister$(registerDto: RegisterDto): Observable<UserTokenDto> {
+    if (registerDto === NULL_REGISTER_DTO) {
+      return of(NULL_USER_TOKEN);
+    }
+
+    const url = `${this.apiUrl}/register`;
+
+    return this.httpClient.post<UserTokenDto>(url, registerDto);
   }
-
-  private login$ = (
-    loginDto: LoginDto | undefined,
-  ): Observable<UserTokenDto> => {
-    if (!loginDto || !loginDto.email || !loginDto.password)
-      return of(NULL_USER_TOKEN);
-    return this.authRepository.postLogin$(loginDto);
-  };
-
-  private register$ = (
-    registerDto: RegisterDto | undefined,
-  ): Observable<UserTokenDto> => {
-    if (!registerDto || !registerDto.email || !registerDto.password)
-      return of(NULL_USER_TOKEN);
-    return this.authRepository.postRegister$(registerDto);
-  };
 }

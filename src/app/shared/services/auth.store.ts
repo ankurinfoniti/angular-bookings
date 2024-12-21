@@ -15,7 +15,7 @@ import { NULL_USER_TOKEN, UserTokenDto } from '../models/user-token.dto';
 export class AuthStore {
   private readonly authState: WritableSignal<UserTokenDto> =
     signal<UserTokenDto>(NULL_USER_TOKEN);
-  private readonly selectToken: Signal<string> = computed(
+  public readonly selectToken: Signal<string> = computed(
     () => this.authState().accessToken,
   );
   public readonly selectIsAuthenticated: Signal<boolean> = computed(
